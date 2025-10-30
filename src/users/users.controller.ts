@@ -27,6 +27,12 @@ export class UsersController {
     return this.usersService.createUser(data);
   }
 
+  // update user
+  @Put(":id")
+  updateUser(@Param("id") id:string, data: {name: string; email:string;password:string}){
+    return this.usersService.updateUser(Number(id), data)
+    
+  }
 
   // create login route
   @Post('/login')

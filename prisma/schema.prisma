@@ -24,14 +24,13 @@ model User {
   employee Employees[]
 }
 
-model EmployeeProject {
-   id               Int                @id @default(autoincrement())
-  employee    Employees @relation(fields: [employeeId], references: [id])
-  employeeId  Int // Foreign key for the Employees model
-  project     Projects  @relation(fields: [projectId], references: [id])
-  projectId   Int // Foreign key for the Projects model
-
-   // Use a composite primary key
+model Employees {
+  id               Int                @id @default(autoincrement())
+  name             String
+  user             User               @relation(fields: [userId], references: [id])
+  userId           Int                @unique
+  // Relation back to the join table
+  projectsOnEmployees EmployeeProject[]
 }
 
 
@@ -43,11 +42,11 @@ model Projects {
 }
 
 
-model Employees {
-  id               Int                @id @default(autoincrement())
-  name             String
-  user             User               @relation(fields: [userId], references: [id])
-  userId           Int                @unique
-  // Relation back to the join table
-  projectsOnEmployees EmployeeProject[]
+model EmployeeProject {
+   id               Int                @id @default(autoincrement())
+  employee    Employees @relation(fields: [employeeId], references: [id])
+  employeeId  Int 
+  project     Projects  @relation(fields: [projectId], references: [id])
+  projectId   Int 
+
 }

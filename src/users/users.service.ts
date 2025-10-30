@@ -41,6 +41,7 @@ export class UsersService {
     }
   }
 
+  
   // create user login
   async loginUser(data: { email: string, password: string }) {
     let jwtToken;
@@ -74,6 +75,29 @@ export class UsersService {
       "statusCode": 200,
       data: token
 
+    }
+  }
+
+    // 🔹 Update user
+  async updateUser(id: number, data: { name?: string; email?: string; password?: string }) {
+    try {
+      const updatedUser = await this.prisma.user.update({
+        where: { id },
+        data: {
+          ...(data.name && { name: data.name }),
+          ...(data.email && { email: data.email }),
+          ...(data.password && { password: md5(data.password) }),
+        },
+      });
+
+      return {
+        message: 'User Updated Successfully',
+        statusCode: 200,
+        data: updatedUser,
+      };
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new HttpException('User update failed', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -147,5 +171,6 @@ export class UsersService {
       data: data
     }
   }
+  
  
 }
